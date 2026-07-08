@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CompliAgent AI - Compliance Workflow</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "background": "#f8f9ff",
+                "error-container": "#ffdad6",
+                "surface-container-low": "#eff4ff",
+                "secondary-fixed": "#6ffbbe",
+                "surface-container-high": "#dce9ff",
+                "inverse-surface": "#213145",
+                "on-primary-fixed": "#131b2e",
+                "on-tertiary-fixed-variant": "#653e00",
+                "primary": "#000000",
+                "inverse-on-surface": "#eaf1ff",
+                "secondary": "#006c49",
+                "on-error": "#ffffff",
+                "on-background": "#0b1c30",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#3f465c",
+                "surface-container": "#e5eeff",
+                "surface-container-highest": "#d3e4fe",
+                "inverse-primary": "#bec6e0",
+                "error": "#ba1a1a",
+                "surface-tint": "#565e74",
+                "on-secondary": "#ffffff",
+                "on-tertiary-container": "#b87500",
+                "primary-container": "#131b2e",
+                "secondary-container": "#6cf8bb",
+                "on-primary-container": "#7c839b",
+                "surface": "#f8f9ff",
+                "on-tertiary-fixed": "#2a1700",
+                "on-surface": "#0b1c30",
+                "tertiary": "#000000",
+                "on-secondary-fixed-variant": "#005236",
+                "on-secondary-container": "#00714d",
+                "on-secondary-fixed": "#002113",
+                "surface-variant": "#d3e4fe",
+                "on-tertiary": "#ffffff",
+                "tertiary-fixed-dim": "#ffb95f",
+                "outline-variant": "#c6c6cd",
+                "outline": "#76777d",
+                "primary-fixed-dim": "#bec6e0",
+                "tertiary-container": "#2a1700",
+                "on-surface-variant": "#45464d",
+                "on-primary": "#ffffff",
+                "on-error-container": "#93000a",
+                "surface-dim": "#cbdbf5",
+                "secondary-fixed-dim": "#4edea3",
+                "primary-fixed": "#dae2fd",
+                "tertiary-fixed": "#ffddb8",
+                "surface-bright": "#f8f9ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "2xl": "48px",
+                "base": "4px",
+                "gutter": "24px",
+                "xl": "32px",
+                "3xl": "64px",
+                "container-max": "1440px",
+                "md": "16px",
+                "lg": "24px",
+                "xs": "4px",
+                "sm": "8px"
+            },
+            "fontFamily": {
+                "label-md": ["JetBrains Mono"],
+                "headline-lg-mobile": ["Inter"],
+                "label-sm": ["JetBrains Mono"],
+                "body-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "headline-lg": ["Inter"],
+                "display-lg": ["Inter"],
+                "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kanban-column {
+            min-width: 320px;
+            max-width: 320px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-inverse-surface border-r border-outline-variant dark:border-outline flex flex-col py-lg px-md z-50">
+<div class="mb-3xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">CompliAgent AI</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Regulatory Auditor</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant group" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant group" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-body-md">Circulars</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant group" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-body-md">Obligations</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-primary dark:text-inverse-primary font-bold border-r-4 border-primary dark:border-inverse-primary bg-surface-container-low dark:bg-surface-container-highest group" href="../task_board/code.html">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-body-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant group" href="../evidence_vault/code.html">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md">Vault</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant group" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body-md">Reports</span>
+</a>
+</nav>
+<button class="mt-lg mb-2xl w-full bg-primary text-on-primary py-md font-label-md flex items-center justify-center gap-sm rounded hover:opacity-90 active:scale-95 transition-all" onclick="window.location.href='../obligation_extractor/code.html'">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+            New Audit
+        </button>
+<div class="border-t border-outline-variant pt-lg space-y-sm">
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant hover:bg-surface-container" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors text-on-surface-variant hover:bg-surface-container" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="h-16 px-gutter flex justify-between items-center sticky top-0 bg-surface dark:bg-background border-b border-outline-variant dark:border-outline z-40">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-96 max-w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search tasks, circulars, or obligations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="bg-primary text-on-primary px-lg py-2 rounded-lg font-label-md flex items-center gap-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload">upload</span>
+                    Upload
+                </button>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all active:scale-95 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high">
+<img class="h-full w-full object-cover" data-alt="Close-up professional corporate headshot of a female compliance officer in a modern high-tech office. She is wearing professional business attire with a confident expression. The lighting is bright and clear, reflecting a modern light-mode interface aesthetic with soft blues and whites in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGzpYY576Q6L2K_h3mlA6QaIIbHktT99kD_uMAuOVBCwMuW9ef4RggSHttyYTKzqVBVfrQr-zckhbq4eVb-ppE78_R2_CT8AH6xO98HQsvsZGgdP99aO2gAklwdWhpa_htqcraoMVPoiNKAt70kSP-1V6ps_5c9R3MFsltYVdt98AtjSJl_0DcbcxwQxiuq73h_n1czlBVKTYCBAMqKcpHkXCyPHVWNHLq2CpTDif55_6sDgUWrOEV8ZiKaKEpm9PzoGSqTTWWg_oz"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-gutter flex-1 flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-xs text-label-sm text-on-surface-variant mb-xs">
+<span>Workspace</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span>Audits</span>
+</nav>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Compliance Workflow</h2>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm bg-surface-container-lowest border border-outline-variant px-md py-sm rounded-lg">
+<span class="text-label-sm text-outline">Risk Level:</span>
+<select class="bg-transparent border-none p-0 text-body-sm font-medium focus:ring-0 cursor-pointer">
+<option>All Levels</option>
+<option>Critical</option>
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+</select>
+</div>
+<div class="flex items-center gap-sm bg-surface-container-lowest border border-outline-variant px-md py-sm rounded-lg">
+<span class="text-label-sm text-outline">Dept:</span>
+<select class="bg-transparent border-none p-0 text-body-sm font-medium focus:ring-0 cursor-pointer">
+<option>All Depts</option>
+<option>Operations</option>
+<option>Finance</option>
+<option>Legal</option>
+<option>Tech</option>
+</select>
+</div>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Kanban Board -->
+<div class="flex-1 flex gap-lg overflow-x-auto custom-scrollbar pb-lg">
+<!-- Column: To Do -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs py-xs border-b-2 border-outline-variant">
+<div class="flex items-center gap-sm">
+<h3 class="font-headline-md text-body-lg font-bold text-on-surface">To Do</h3>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full text-label-sm">3</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-2 py-0.5 rounded-full text-label-sm bg-error-container text-on-error-container font-medium">Critical</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<h4 class="font-body-md font-semibold text-on-surface mb-md">Verify client fund segregation records for Q3</h4>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="px-2 py-0.5 rounded text-[11px] font-label-md bg-surface-container text-on-surface-variant uppercase">Operations</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs text-outline">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-sm">Oct 24</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="attach_file">attach_file</span>
+<div class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center text-[10px] font-bold">JD</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-grab">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-2 py-0.5 rounded-full text-label-sm bg-secondary-container text-on-secondary-container font-medium">Medium</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<h4 class="font-body-md font-semibold text-on-surface mb-md">Update AML training module for floor staff</h4>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="px-2 py-0.5 rounded text-[11px] font-label-md bg-surface-container text-on-surface-variant uppercase">Legal</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs text-outline">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-sm">Oct 28</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center text-[10px] font-bold">AS</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs py-xs border-b-2 border-primary">
+<div class="flex items-center gap-sm">
+<h3 class="font-headline-md text-body-lg font-bold text-on-surface">In Progress</h3>
+<span class="bg-primary text-on-primary px-2 py-0.5 rounded-full text-label-sm">1</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-md">
+<div class="bg-surface-container-lowest border border-primary p-md rounded-lg shadow-md group cursor-grab">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-2 py-0.5 rounded-full text-label-sm bg-orange-100 text-orange-800 font-medium">High</span>
+<span class="material-symbols-outlined text-primary" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<h4 class="font-body-md font-semibold text-on-surface mb-md">Submit quarterly Cyber Security Audit report</h4>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="px-2 py-0.5 rounded text-[11px] font-label-md bg-surface-container text-on-surface-variant uppercase">Tech</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs text-primary font-medium">
+<span class="material-symbols-outlined text-[16px] animate-spin" data-icon="sync" style="animation-duration: 3s;">sync</span>
+<span class="text-label-sm">Processing</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="attach_file">attach_file</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-container-highest text-[10px] flex items-center justify-center font-bold">RK</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary-fixed text-on-primary-fixed text-[10px] flex items-center justify-center font-bold">MK</div>
+</div>
+</div>
+</div>
+<div class="mt-md bg-surface-container rounded-full h-1">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Evidence Uploaded -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs py-xs border-b-2 border-outline-variant">
+<div class="flex items-center gap-sm">
+<h3 class="font-headline-md text-body-lg font-bold text-on-surface">Evidence Uploaded</h3>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full text-label-sm">2</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-grab">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-2 py-0.5 rounded-full text-label-sm bg-secondary-container text-on-secondary-container font-medium">Medium</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<h4 class="font-body-md font-semibold text-on-surface mb-md">Review 5% sample of client registration forms</h4>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="px-2 py-0.5 rounded text-[11px] font-label-md bg-surface-container text-on-surface-variant uppercase">Operations</span>
+</div>
+<div class="p-sm bg-surface-container-low rounded border border-dashed border-outline-variant mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+<span class="text-label-sm truncate">sample_batch_001.pdf</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs text-secondary font-medium">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="text-label-sm">Uploaded</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center text-[10px] font-bold">LM</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Verified -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs py-xs border-b-2 border-secondary">
+<div class="flex items-center gap-sm">
+<h3 class="font-headline-md text-body-lg font-bold text-on-surface">Verified</h3>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-full text-label-sm">8</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-md opacity-70">
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg shadow-sm group">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-2 py-0.5 rounded-full text-label-sm bg-surface-variant text-on-surface-variant font-medium">Low</span>
+<span class="material-symbols-outlined text-secondary" data-icon="verified" data-weight="fill">verified</span>
+</div>
+<h4 class="font-body-md font-semibold text-on-surface mb-md line-through">Monthly reconciliation of DP charges</h4>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="history">history</span>
+<span class="text-label-sm">Completed 2d ago</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-on-primary-fixed-variant text-surface flex items-center justify-center text-[10px] font-bold">AI</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floatting Context Banner - Audit Insight -->
+<div class="fixed bottom-lg right-lg max-w-sm bg-inverse-surface text-inverse-on-surface p-lg rounded-xl shadow-2xl border border-outline flex flex-col gap-md z-50">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-secondary-fixed uppercase tracking-wider">AI Audit Insight</span>
+</div>
+<button class="text-inverse-on-surface opacity-50 hover:opacity-100 transition-opacity"><span class="material-symbols-outlined" data-icon="close">close</span></button>
+</div>
+<p class="text-body-sm leading-relaxed">
+                I've detected a bottleneck in <strong class="text-secondary-fixed">Operations</strong>. Evidence uploads are taking 40% longer than average this week. Suggesting redistribution of tasks to the Legal team.
+            </p>
+<div class="flex gap-sm">
+<button class="flex-1 bg-secondary-fixed text-on-secondary-fixed py-sm rounded font-label-md hover:brightness-110 transition-all">Optimize</button>
+<button class="px-md py-sm rounded border border-outline text-inverse-on-surface font-label-md hover:bg-white/10 transition-all">Dismiss</button>
+</div>
+</div>
+</main>
+<!-- Interactions Script -->
+<script>
+        document.querySelectorAll('.kanban-column').forEach(column => {
+            column.addEventListener('dragover', e => {
+                e.preventDefault();
+            });
+        });
+
+        // Simple visual feedback for hover interactions
+        const cards = document.querySelectorAll('.kanban-column > div > div');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if(!card.classList.contains('opacity-70')) {
+                    card.style.transform = 'translateY(-2px)';
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+    </script>
+</body></html>

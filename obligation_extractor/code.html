@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Regulatory Obligation Extractor | CompliAgent AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f8f9ff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container-high": "#dce9ff",
+                    "inverse-surface": "#213145",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "primary": "#000000",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#006c49",
+                    "on-error": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container": "#e5eeff",
+                    "surface-container-highest": "#d3e4fe",
+                    "inverse-primary": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#565e74",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#b87500",
+                    "primary-container": "#131b2e",
+                    "secondary-container": "#6cf8bb",
+                    "on-primary-container": "#7c839b",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface": "#0b1c30",
+                    "tertiary": "#000000",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary-container": "#00714d",
+                    "on-secondary-fixed": "#002113",
+                    "surface-variant": "#d3e4fe",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "outline-variant": "#c6c6cd",
+                    "outline": "#76777d",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary-container": "#2a1700",
+                    "on-surface-variant": "#45464d",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "secondary-fixed-dim": "#4edea3",
+                    "primary-fixed": "#dae2fd",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-bright": "#f8f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "2xl": "48px",
+                    "base": "4px",
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "3xl": "64px",
+                    "container-max": "1440px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .risk-high { background-color: rgba(186, 26, 26, 0.1); color: #ba1a1a; }
+        .risk-medium { background-color: rgba(255, 185, 95, 0.15); color: #653e00; }
+        .risk-low { background-color: rgba(0, 108, 73, 0.1); color: #006c49; }
+        
+        .zebra-table tr:nth-child(even) {
+            background-color: #f1f5f9;
+        }
+
+        .side-nav-active {
+            color: #000000;
+            font-weight: 700;
+            border-right: 4px solid #000000;
+            background-color: #eff4ff;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- Sidebar (SideNavBar Anchor) -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface flex flex-col py-lg px-md z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">CompliAgent AI</h1>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-wider">Regulatory Auditor</p>
+</div>
+<nav class="flex-1 space-y-base">
+<!-- Navigation Items Mapping from JSON -->
+<a class="flex items-center gap-md py-sm px-md text-on-surface-variant hover:bg-surface-container transition-colors" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md text-on-surface-variant hover:bg-surface-container transition-colors" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-body-md">Circulars</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md side-nav-active transition-colors" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-body-md">Obligations</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md text-on-surface-variant hover:bg-surface-container transition-colors" href="../task_board/code.html">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-body-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md text-on-surface-variant hover:bg-surface-container transition-colors" href="../evidence_vault/code.html">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md">Vault</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md text-on-surface-variant hover:bg-surface-container transition-colors" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body-md">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-md font-bold mb-lg transition-transform active:scale-95" onclick="window.location.href='../obligation_extractor/code.html'">
+                New Audit
+            </button>
+<div class="space-y-base">
+<a class="flex items-center gap-md py-xs px-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md py-xs px-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md">Support</span>
+</a>
+</div>
+<div class="mt-lg flex items-center gap-md px-md">
+<div class="w-8 h-8 bg-surface-variant rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a female compliance officer in a modern workspace, shot in high-definition with soft, professional lighting. She is wearing corporate attire, exuding authority and precision. The background is a clean, minimalist office with subtle blue and grey tones to match the corporate fintech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASo3Mra7qIFQljqzJb9MdesajKgPBJ4RYYS8QCAWOsuwUTNiOqay2Yh8bb4wqMO3fTc3wp9ihYiGM_XggR4hCVhIitQ1m1P4oOQwsuK5AUxEd9zHk4QUNRLBDRK0c72Bm_Wuq7LACkqq1q2fi7TsCOJqcX7JOeZgcLFUdstzKbcfb2WUPgC_7R3MTzTfT0nKQfkyyYT1iGRTmfcBr9olOpPPfY_6jiyXhvbjMoqqmdMGr4T3llKcXIqP0eOZ4xkHHbmHPs1kR_uoTX"/>
+</div>
+<div>
+<p class="font-label-sm font-bold">Compliance Officer</p>
+<p class="text-[10px] text-on-surface-variant">Lvl 4 Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation (TopNavBar Anchor) -->
+<header class="fixed top-0 right-0 left-0 ml-64 h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-gutter z-40">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-md py-sm bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-0 text-sm" placeholder="Search obligations, clauses, or citations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="bg-primary text-on-primary px-lg py-sm text-sm font-bold hover:opacity-90 transition-opacity" onclick="window.location.href='../obligation_extractor/code.html'">Upload</button>
+<div class="flex items-center gap-md">
+<button class="p-base text-on-surface-variant hover:text-primary transition-all relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-base text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</button>
+</div>
+<div class="w-10 h-10 border border-outline-variant rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of a high-resolution corporate profile avatar for a digital system user, focusing on clean facial features and a professional expression. The lighting is bright and modern, set against a neutral, blurred office background. The color scheme is consistent with a high-end fintech and regulatory software environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChDTivTERJ56sokUcK-sbgZYXvswlkNfxFA7dELemqUK44UFnG-Q9beGFau7UOPXMznDTYK7jJpGlTSkcLDE7eDOqcTZhyAuQl2BBVtEviud_d02Ra_USwdHOm0XM2Q-wb1coTk4b9m8h6uCWcxrdNwWgEbewCzqpE_M7Y3gHxQaqP1RJjviwYnuBpPCXqo9-bB0eSmAuAhB1ley84HR7oP5B-AJ9clOaO2pcWS0qZfha_ys7BZV9GlypKWO7wZMWeUEp5QO_Dmaf_"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-gutter min-h-screen">
+<!-- Header & Primary Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md mb-2xl">
+<div>
+<nav class="flex items-center gap-xs text-on-surface-variant text-[12px] mb-base">
+<span>Audit Pipeline</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-bold">SEBI Master Circular 2024</span>
+</nav>
+<h2 class="font-headline-lg text-headline-lg text-on-background tracking-tight">Regulatory Obligation Extractor</h2>
+<p class="text-on-surface-variant mt-xs max-w-2xl">AI-driven extraction of actionable compliance mandates from the SEBI Master Circular for Stock Brokers.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-sm px-lg py-md border border-outline text-primary font-bold hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+                    Fetch from SEBI
+                </button>
+<button class="flex items-center gap-sm px-lg py-md bg-primary text-on-primary font-bold hover:opacity-90 transition-opacity" onclick="window.location.href='../obligation_extractor/code.html'">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+                    Upload New Circular
+                </button>
+</div>
+</div>
+<!-- Dashboard Summary Bar (Subtle Tonal Depth) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-2xl">
+<div class="bg-surface-container-lowest border border-outline-variant p-lg">
+<p class="font-label-sm text-on-surface-variant uppercase mb-xs">Total Obligations</p>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-[32px] leading-none font-bold">142</span>
+<span class="text-secondary font-bold text-sm mb-1">+8 new</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg border-l-4 border-error">
+<p class="font-label-sm text-on-surface-variant uppercase mb-xs">High Risk Critical</p>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-[32px] leading-none font-bold">12</span>
+<span class="text-error font-bold text-sm mb-1">Action Required</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg">
+<p class="font-label-sm text-on-surface-variant uppercase mb-xs">Pending Extraction</p>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-[32px] leading-none font-bold">04</span>
+<span class="text-on-surface-variant font-bold text-sm mb-1">Processing...</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg">
+<p class="font-label-sm text-on-surface-variant uppercase mb-xs">AI Extraction Accuracy</p>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-[32px] leading-none font-bold">98.4%</span>
+<span class="text-secondary material-symbols-outlined mb-1" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+<!-- Table View: The Core Data Container -->
+<div class="bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<!-- Table Controls -->
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-white">
+<div class="flex gap-md">
+<button class="flex items-center gap-xs px-sm py-xs text-sm font-medium border border-outline-variant hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center gap-xs px-sm py-xs text-sm font-medium border border-outline-variant hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="sort">sort</span>
+                        Sort by Clause
+                    </button>
+</div>
+<p class="text-on-surface-variant text-sm font-label-md">Showing 1-12 of 142 obligations</p>
+</div>
+<!-- Main Data Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left zebra-table border-collapse">
+<thead class="bg-surface-container-high text-on-surface font-label-md text-[13px] uppercase tracking-wider">
+<tr>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Clause Ref</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold w-1/4">Obligation Description</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Applicable Entity</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Department</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Risk Level</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Evidence Required</th>
+<th class="px-lg py-md border-b border-outline-variant font-bold">Status</th>
+</tr>
+</thead>
+<tbody class="text-body-sm text-on-surface divide-y divide-outline-variant">
+<!-- Example 1: High Risk -->
+<tr>
+<td class="px-lg py-lg align-top font-label-md text-primary font-bold">Clause 4.1.2</td>
+<td class="px-lg py-lg align-top">
+<p class="mb-sm">Mandatory segregation of client funds and securities. Brokers must ensure no co-mingling with proprietary accounts.</p>
+<span class="inline-flex items-center gap-xs text-[11px] text-on-primary-container bg-surface-container-highest px-xs py-[2px] rounded-sm">
+<span class="material-symbols-outlined text-[12px]" data-icon="history_edu">history_edu</span>
+                                    AI Citation: Annexure G, Para 3
+                                </span>
+</td>
+<td class="px-lg py-lg align-top">Stock Broker / Trading Member</td>
+<td class="px-lg py-lg align-top">Operations &amp; Finance</td>
+<td class="px-lg py-lg align-top">
+<span class="px-sm py-1 rounded-full text-[12px] font-bold risk-high uppercase">Critical</span>
+</td>
+<td class="px-lg py-lg align-top">Daily fund balance audit reports, bank statement logs.</td>
+<td class="px-lg py-lg align-top">
+<span class="flex items-center gap-xs text-error font-bold">
+<span class="material-symbols-outlined text-[18px]" data-icon="error">error</span>
+                                    Pending
+                                </span>
+</td>
+</tr>
+<!-- Example 2: Medium Risk -->
+<tr>
+<td class="px-lg py-lg align-top font-label-md text-primary font-bold">Clause 7.2.1</td>
+<td class="px-lg py-lg align-top">
+<p class="mb-sm">Appointment of Compliance Officer. Qualifications and experience must meet SEBI specified minimum standards.</p>
+<span class="inline-flex items-center gap-xs text-[11px] text-on-primary-container bg-surface-container-highest px-xs py-[2px] rounded-sm">
+<span class="material-symbols-outlined text-[12px]" data-icon="history_edu">history_edu</span>
+                                    AI Citation: Chapter II, Section 7
+                                </span>
+</td>
+<td class="px-lg py-lg align-top">Corporate Body</td>
+<td class="px-lg py-lg align-top">Human Resources</td>
+<td class="px-lg py-lg align-top">
+<span class="px-sm py-1 rounded-full text-[12px] font-bold risk-medium uppercase">Moderate</span>
+</td>
+<td class="px-lg py-lg align-top">Appointment letter, NISM certificates, Board resolution.</td>
+<td class="px-lg py-lg align-top">
+<span class="flex items-center gap-xs text-secondary font-bold">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+                                    Verified
+                                </span>
+</td>
+</tr>
+<!-- Example 3: Low Risk -->
+<tr>
+<td class="px-lg py-lg align-top font-label-md text-primary font-bold">Clause 12.5.4</td>
+<td class="px-lg py-lg align-top">
+<p class="mb-sm">Display of Contact Details of Compliance Officer and Redressal Cell on website and office entrance.</p>
+<span class="inline-flex items-center gap-xs text-[11px] text-on-primary-container bg-surface-container-highest px-xs py-[2px] rounded-sm">
+<span class="material-symbols-outlined text-[12px]" data-icon="history_edu">history_edu</span>
+                                    AI Citation: Grievance Redressal Mechanism
+                                </span>
+</td>
+<td class="px-lg py-lg align-top">All Registered Brokers</td>
+<td class="px-lg py-lg align-top">Public Relations / IT</td>
+<td class="px-lg py-lg align-top">
+<span class="px-sm py-1 rounded-full text-[12px] font-bold risk-low uppercase">Low</span>
+</td>
+<td class="px-lg py-lg align-top">Screenshot of website footer, Photograph of office signage.</td>
+<td class="px-lg py-lg align-top">
+<span class="flex items-center gap-xs text-on-surface-variant font-bold">
+<span class="material-symbols-outlined text-[18px]" data-icon="pending">pending</span>
+                                    Under Review
+                                </span>
+</td>
+</tr>
+<!-- Example 4: High Risk -->
+<tr>
+<td class="px-lg py-lg align-top font-label-md text-primary font-bold">Clause 2.11</td>
+<td class="px-lg py-lg align-top">
+<p class="mb-sm">Annual System Audit by a SEBI empanelled auditor for technical infrastructure and security protocols.</p>
+<span class="inline-flex items-center gap-xs text-[11px] text-on-primary-container bg-surface-container-highest px-xs py-[2px] rounded-sm">
+<span class="material-symbols-outlined text-[12px]" data-icon="history_edu">history_edu</span>
+                                    AI Citation: Cybersecurity Framework
+                                </span>
+</td>
+<td class="px-lg py-lg align-top">Qualified Stock Broker (QSB)</td>
+<td class="px-lg py-lg align-top">IT / Cybersecurity</td>
+<td class="px-lg py-lg align-top">
+<span class="px-sm py-1 rounded-full text-[12px] font-bold risk-high uppercase">Critical</span>
+</td>
+<td class="px-lg py-lg align-top">External audit report, vulnerability assessment logs.</td>
+<td class="px-lg py-lg align-top">
+<span class="flex items-center gap-xs text-error font-bold">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+                                    Overdue
+                                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer/Pagination -->
+<div class="px-lg py-md border-t border-outline-variant bg-white flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="text-sm text-on-surface-variant">Rows per page:</span>
+<select class="bg-surface-container-lowest border border-outline-variant text-sm py-xs px-sm focus:ring-0">
+<option>10</option>
+<option selected="">20</option>
+<option>50</option>
+</select>
+</div>
+<div class="flex items-center gap-base">
+<button class="p-xs text-outline hover:text-primary transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="first_page">first_page</span>
+</button>
+<button class="p-xs text-outline hover:text-primary transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex gap-base">
+<span class="px-sm py-xs bg-primary text-on-primary font-bold text-sm">1</span>
+<button class="px-sm py-xs text-sm hover:bg-surface-container-low transition-colors">2</button>
+<button class="px-sm py-xs text-sm hover:bg-surface-container-low transition-colors">3</button>
+<span class="px-sm py-xs text-sm">...</span>
+<button class="px-sm py-xs text-sm hover:bg-surface-container-low transition-colors">8</button>
+</div>
+<button class="p-xs text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="p-xs text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="last_page">last_page</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AI Assistant Overlay Trigger -->
+<div class="fixed bottom-lg right-lg z-50">
+<button class="group bg-primary text-on-primary rounded-full p-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-bold">Ask AI Auditor</span>
+</button>
+</div>
+</main>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(this.classList.contains('active:scale-95')) return;
+                this.classList.add('opacity-80');
+                setTimeout(() => this.classList.remove('opacity-80'), 150);
+            });
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary-container', 'ring-opacity-20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary-container', 'ring-opacity-20');
+        });
+    </script>
+</body></html>

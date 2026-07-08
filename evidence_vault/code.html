@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Evidence Vault - CompliAgent AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f8f9ff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container-high": "#dce9ff",
+                    "inverse-surface": "#213145",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "primary": "#000000",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#006c49",
+                    "on-error": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container": "#e5eeff",
+                    "surface-container-highest": "#d3e4fe",
+                    "inverse-primary": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#565e74",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#b87500",
+                    "primary-container": "#131b2e",
+                    "secondary-container": "#6cf8bb",
+                    "on-primary-container": "#7c839b",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface": "#0b1c30",
+                    "tertiary": "#000000",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary-container": "#00714d",
+                    "on-secondary-fixed": "#002113",
+                    "surface-variant": "#d3e4fe",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "outline-variant": "#c6c6cd",
+                    "outline": "#76777d",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary-container": "#2a1700",
+                    "on-surface-variant": "#45464d",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "secondary-fixed-dim": "#4edea3",
+                    "primary-fixed": "#dae2fd",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-bright": "#f8f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "2xl": "48px",
+                    "base": "4px",
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "3xl": "64px",
+                    "container-max": "1440px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .risk-border-critical { border-left: 4px solid #ba1a1a; }
+        .risk-border-warning { border-left: 4px solid #b87500; }
+        .risk-border-success { border-left: 4px solid #006c49; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/10">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-lg px-md bg-surface border-r border-outline-variant z-50">
+<div class="mb-2xl px-sm">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">CompliAgent AI</h1>
+<p class="text-on-surface-variant font-label-sm text-label-sm mt-xs">Regulatory Auditor</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+<!-- Nav Item: Dashboard -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors group" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Nav Item: Circulars -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors group" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined">description</span>
+<span class="font-body-md text-body-md">Circulars</span>
+</a>
+<!-- Nav Item: Obligations -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors group" href="../obligation_extractor/code.html">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-body-md text-body-md">Obligations</span>
+</a>
+<!-- Nav Item: Tasks -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors group" href="../task_board/code.html">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-body-md text-body-md">Tasks</span>
+</a>
+<!-- Nav Item: Vault (Active) -->
+<a class="flex items-center gap-md px-md py-sm text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-colors" href="../evidence_vault/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-body-md text-body-md">Vault</span>
+</a>
+<!-- Nav Item: Reports -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors group" href="../compliance_dashboard/code.html">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 pt-lg border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-md rounded-lg font-body-md font-bold hover:opacity-90 transition-opacity mb-lg" onclick="window.location.href='../obligation_extractor/code.html'">
+                New Audit
+            </button>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<div class="flex items-center gap-md px-md py-md mt-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate compliance officer in a sharp dark suit, clean lighting, minimalist background, high-resolution business photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbnK0WrOQalW6Tod2f7WT7frGSGjjVypY9vxtVFn9bEZGT4CQUVsWp1aQGk6uIEbf73on4UeoBYohw3ww1Ia6fGaoCUVUN6jTyPawEwYT4OB70rjdRMhRoh-Gz_wHiAIuHItfD8LZucIi_8l3mPitlx3aJucMJtU7juglCCFanWLiWE6vqKyUnn53CZSfZyHQkRzq9Fj3OKwEVg_T1f5Avs0tkJ0N8hGHGh-bVYkeqNmTDtMZegK25IsGn-95aa04T1zQqFG2JJTt4"/>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-bold text-sm">Alex Rivera</span>
+<span class="text-on-surface-variant text-xs">Lead Auditor</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center h-16 px-gutter ml-64 w-[calc(100%-16rem)] bg-surface border-b border-outline-variant sticky top-0 z-40">
+<div class="flex items-center flex-1 max-w-xl relative">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant pointer-events-none">search</span>
+<input class="w-full pl-xl pr-md py-sm bg-surface-container border border-outline-variant rounded-lg font-body-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="Search evidence, obligations, or audit ID..." type="text"/>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm">
+<button class="p-sm text-on-surface-variant hover:text-primary transition-all active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-sm text-on-surface-variant hover:text-primary transition-all active:scale-95">
+<span class="material-symbols-outlined">smart_toy</span>
+</button>
+</div>
+<button class="px-lg py-sm bg-secondary text-on-secondary rounded-lg font-label-md text-label-md font-bold hover:opacity-90 active:scale-95 transition-all" onclick="window.location.href='../evidence_vault/code.html'">
+                Upload
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-gutter min-h-[calc(100vh-4rem)]">
+<div class="mb-xl">
+<div class="flex items-center gap-sm text-on-surface-variant mb-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Compliance Assets</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Evidence Vault</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Evidence Vault</h2>
+<p class="text-on-surface-variant font-body-md mt-xs">Manage regulatory proofs and automated AI verification for SEBI compliance.</p>
+</div>
+<!-- Split View Layout -->
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- Left Side: Obligation List -->
+<section class="col-span-12 lg:col-span-4 flex flex-col gap-md">
+<div class="flex justify-between items-center px-sm">
+<h3 class="font-headline-md text-headline-md text-primary">Active Requirements</h3>
+<span class="bg-surface-container-highest px-sm py-xs rounded text-label-sm font-label-md">12 Total</span>
+</div>
+<div class="space-y-sm">
+<!-- Obligation Item 1 (Selected) -->
+<div class="bg-surface-container-lowest border border-primary p-md rounded-lg shadow-sm cursor-pointer relative risk-border-critical">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-error-container text-on-error-container px-sm py-xs rounded-full text-[10px] font-bold uppercase tracking-tighter">Incomplete</span>
+<span class="text-on-surface-variant text-xs">ID: SEBI-KYC-002</span>
+</div>
+<h4 class="font-body-md font-bold text-on-surface mb-xs">KYC Record Verification</h4>
+<p class="text-on-surface-variant text-xs line-clamp-2">Validate client onboarding documentation against master circular 2024/01.</p>
+<div class="mt-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">attachment</span>
+<span class="text-on-surface-variant text-xs">2 Files</span>
+</div>
+<div class="absolute right-md bottom-md">
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+</div>
+<!-- Obligation Item 2 -->
+<div class="bg-surface border border-outline-variant p-md rounded-lg hover:border-primary transition-colors cursor-pointer risk-border-warning">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-surface-container-high text-on-tertiary-container px-sm py-xs rounded-full text-[10px] font-bold uppercase tracking-tighter">Review Needed</span>
+<span class="text-on-surface-variant text-xs">ID: AML-TRX-045</span>
+</div>
+<h4 class="font-body-md font-bold text-on-surface mb-xs">Suspicious Trade Reporting</h4>
+<p class="text-on-surface-variant text-xs line-clamp-2">Evidence of daily trade monitoring and STR filing for high-frequency accounts.</p>
+<div class="mt-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">attachment</span>
+<span class="text-on-surface-variant text-xs">5 Files</span>
+</div>
+</div>
+<!-- Obligation Item 3 -->
+<div class="bg-surface border border-outline-variant p-md rounded-lg hover:border-primary transition-colors cursor-pointer risk-border-success">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded-full text-[10px] font-bold uppercase tracking-tighter">Verified</span>
+<span class="text-on-surface-variant text-xs">ID: OPS-MAR-089</span>
+</div>
+<h4 class="font-body-md font-bold text-on-surface mb-xs">Margin Requirement Audit</h4>
+<p class="text-on-surface-variant text-xs line-clamp-2">Submission of quarterly margin status reports as per SEBI operational guidelines.</p>
+<div class="mt-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">attachment</span>
+<span class="text-on-surface-variant text-xs">1 File</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Detail View -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Detail Main Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-xl border-b border-outline-variant">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+<div>
+<span class="text-label-sm font-label-md text-on-surface-variant block mb-base">Obligation ID: SEBI-KYC-002</span>
+<h3 class="font-headline-md text-headline-md text-primary">KYC Record Verification</h3>
+</div>
+<button class="bg-primary text-on-primary px-lg py-md rounded-lg font-bold flex items-center gap-md hover:opacity-90 transition-all active:scale-95 group">
+<span class="material-symbols-outlined">auto_awesome</span>
+                                Verify with AI
+                            </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg p-lg bg-surface-container-low rounded-lg mb-xl">
+<div>
+<span class="text-label-sm font-label-md text-on-surface-variant uppercase">Deadline</span>
+<p class="text-on-surface font-bold mt-xs">Oct 24, 2024</p>
+</div>
+<div>
+<span class="text-label-sm font-label-md text-on-surface-variant uppercase">Risk Level</span>
+<div class="flex items-center gap-sm mt-xs">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<p class="text-error font-bold">Critical High</p>
+</div>
+</div>
+<div>
+<span class="text-label-sm font-label-md text-on-surface-variant uppercase">Owner</span>
+<p class="text-on-surface font-bold mt-xs">KYC Operations Dept.</p>
+</div>
+</div>
+<!-- AI Status Banner -->
+<div class="flex items-start gap-md p-lg border-l-4 border-error bg-error-container/10 rounded-r-lg mb-xl">
+<span class="material-symbols-outlined text-error mt-xs">warning</span>
+<div class="flex-1">
+<h5 class="text-error font-bold font-body-md">AI Verification: Partially Compliant</h5>
+<p class="text-on-surface-variant text-sm mt-xs">Found client ID proofs and residential records for 192/200 accounts. <span class="font-bold text-on-surface">Missing Approval Record</span> for the Top-tier category (8 accounts). Cross-referencing with master circular failed on signature presence.</p>
+</div>
+</div>
+<!-- Uploaded Files Section -->
+<div>
+<h4 class="font-body-md font-bold mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">folder_open</span>
+                                Evidence Files (3)
+                            </h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex items-center gap-md p-md border border-outline-variant rounded-lg hover:bg-surface-container transition-colors group cursor-pointer">
+<div class="w-10 h-10 bg-error-container/20 text-error flex items-center justify-center rounded">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-on-surface truncate">KYC_Master_Log_Q3.pdf</p>
+<p class="text-[10px] text-on-surface-variant uppercase">2.4 MB • Uploaded 2h ago</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">download</span>
+</div>
+<div class="flex items-center gap-md p-md border border-outline-variant rounded-lg hover:bg-surface-container transition-colors group cursor-pointer">
+<div class="w-10 h-10 bg-secondary-container/20 text-secondary flex items-center justify-center rounded">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-on-surface truncate">Audit_Checklist_Sheet.xlsx</p>
+<p class="text-[10px] text-on-surface-variant uppercase">142 KB • Uploaded 1d ago</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">download</span>
+</div>
+<div class="flex items-center justify-center gap-sm p-md border border-dashed border-outline-variant rounded-lg hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">add_circle</span>
+<span class="text-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">Add Supporting File</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail / History Footer -->
+<div class="bg-surface-container-low p-xl">
+<h4 class="font-body-md font-bold mb-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+                            Audit Trail
+                        </h4>
+<div class="relative space-y-lg before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant">
+<!-- Trail Item 1 -->
+<div class="relative pl-xl flex gap-md">
+<div class="absolute left-0 w-6 h-6 bg-surface-container-highest rounded-full border-2 border-surface flex items-center justify-center z-10">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">AI Verification Initiated</p>
+<p class="text-xs text-on-surface-variant">System performed automated OCR check on KYC_Master_Log_Q3.pdf.</p>
+<span class="text-[10px] font-label-md text-on-surface-variant mt-xs block">TODAY • 11:45 AM</span>
+</div>
+</div>
+<!-- Trail Item 2 -->
+<div class="relative pl-xl flex gap-md">
+<div class="absolute left-0 w-6 h-6 bg-surface-container-highest rounded-full border-2 border-surface flex items-center justify-center z-10">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">File Uploaded: KYC_Master_Log_Q3.pdf</p>
+<p class="text-xs text-on-surface-variant">Uploaded by <span class="font-bold text-primary">Alex Rivera</span> (Lead Auditor).</p>
+<span class="text-[10px] font-label-md text-on-surface-variant mt-xs block">TODAY • 09:12 AM</span>
+</div>
+</div>
+<!-- Trail Item 3 -->
+<div class="relative pl-xl flex gap-md">
+<div class="absolute left-0 w-6 h-6 bg-surface-container-highest rounded-full border-2 border-surface flex items-center justify-center z-10">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Task Assigned to KYC Team</p>
+<p class="text-xs text-on-surface-variant">Initial compliance obligation created via SEBI Circular 2024/01.</p>
+<span class="text-[10px] font-label-md text-on-surface-variant mt-xs block">OCT 20, 2024 • 04:30 PM</span>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-lg border-t border-outline-variant flex justify-center">
+<button class="text-on-surface-variant text-xs font-bold hover:text-primary transition-colors flex items-center gap-xs">
+                                View Full History Log
+                                <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Collaborative Note Section -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-lg flex flex-col md:flex-row gap-lg items-center">
+<div class="flex-1">
+<h5 class="font-body-md font-bold text-on-surface">Auditor Note</h5>
+<p class="text-sm text-on-surface-variant italic">"We need the Regional Manager's approval stamp on the Tier-1 log before final AI verification can clear the 'Incomplete' status."</p>
+</div>
+<div class="flex gap-md w-full md:w-auto">
+<button class="flex-1 md:flex-initial px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-sm font-bold hover:bg-white transition-all">Resolve</button>
+<button class="flex-1 md:flex-initial px-md py-sm bg-primary text-on-primary rounded-lg text-sm font-bold hover:opacity-90 transition-all">Reply</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Micro-interaction for clicking on obligation list items
+        document.querySelectorAll('.cursor-pointer.risk-border-warning, .cursor-pointer.risk-border-success, .cursor-pointer.risk-border-critical').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active state from all
+                document.querySelectorAll('.bg-surface-container-lowest.border-primary').forEach(el => {
+                    el.classList.remove('bg-surface-container-lowest', 'border-primary', 'shadow-sm');
+                    el.classList.add('bg-surface', 'border-outline-variant');
+                });
+                // Add active state to clicked
+                this.classList.remove('bg-surface', 'border-outline-variant');
+                this.classList.add('bg-surface-container-lowest', 'border-primary', 'shadow-sm');
+            });
+        });
+    </script>
+</body></html>
